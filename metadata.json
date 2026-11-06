@@ -1,0 +1,6 @@
+{
+  "name": "Sayem UAE Typing & Live Document Tracker",
+  "description": "Professional UAE typing, visa processing, document preparation and real-time application status tracking portal for individuals and businesses across all seven Emirates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

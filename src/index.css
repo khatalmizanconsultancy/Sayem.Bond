@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #080d1b;
+    --panel-glass: rgba(255, 255, 255, 0.05);
+    --panel-border: rgba(255, 255, 255, 0.12);
+    --cyan-glow: #73e4e8;
+    --purple-glow: #a99cff;
+    --green-glow: #68e0ae;
+    --red-glow: #ff8296;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    background-color: #080d1b;
+    background-image: 
+      radial-gradient(ellipse 70% 45% at 12% 6%, rgba(83, 104, 220, 0.25), transparent 45%),
+      radial-gradient(ellipse 60% 40% at 90% 25%, rgba(39, 207, 192, 0.2), transparent 42%),
+      radial-gradient(ellipse 50% 35% at 50% 88%, rgba(169, 156, 255, 0.15), transparent 48%);
+    background-attachment: fixed;
+    color: #f5f7ff;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(115, 228, 232, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px -12px rgba(115, 228, 232, 0.18);
+}
+
+.glass-input {
+  background: rgba(8, 14, 27, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  color: #f5f7ff;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  border-color: #73e4e8;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(115, 228, 232, 0.2);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(8, 13, 27, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(115, 228, 232, 0.5);
+}
+
+/* Continuous Marquee Ticker */
+@keyframes marqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 135s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Print styling for receipts */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-receipt, #printable-receipt * {
+    visibility: visible !important;
+  }
+  #printable-receipt {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 32px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+}
