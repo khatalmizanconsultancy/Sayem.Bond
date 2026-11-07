@@ -3,6 +3,7 @@ import { Printer, X, ShieldCheck, CheckCircle2, Lock } from 'lucide-react';
 import { TransactionRecord, ApplicantRecord } from '../types.ts';
 import { Logo } from './Logo.tsx';
 import { QRCodeVisual } from './QRCodeVisual.tsx';
+import { ClientAvatar } from './ClientAvatar.tsx';
 
 interface PrintableReceiptProps {
   receiptData?: TransactionRecord | null;
@@ -87,14 +88,21 @@ export const PrintableReceipt: React.FC<PrintableReceiptProps> = ({
           </div>
 
           {/* Client & Service Particulars */}
-          <div className="grid grid-cols-2 gap-4 text-xs bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <div className="space-y-1">
-              <span className="text-gray-400 uppercase font-bold text-[10px] tracking-wider">Client / Applicant</span>
-              <p className="font-extrabold text-sm text-gray-900">{applicantName}</p>
-              <p className="text-gray-600 font-mono">Phone: {phone}</p>
-              {applicantData?.emirate && (
-                <p className="text-gray-600">Emirate: <b className="text-gray-800">{applicantData.emirate}</b></p>
-              )}
+          <div className="grid grid-cols-2 gap-4 text-xs bg-gray-50 p-4 rounded-xl border border-gray-200 items-center">
+            <div className="flex items-center gap-3">
+              <ClientAvatar
+                photoUrl={applicantData?.photoUrl}
+                name={applicantName}
+                size="lg"
+              />
+              <div className="space-y-0.5 min-w-0">
+                <span className="text-gray-400 uppercase font-bold text-[10px] tracking-wider block">Client / Applicant</span>
+                <p className="font-extrabold text-sm text-gray-900 truncate">{applicantName}</p>
+                <p className="text-gray-600 font-mono text-[11px]">Phone: {phone}</p>
+                {applicantData?.emirate && (
+                  <p className="text-gray-600 text-[11px]">Emirate: <b className="text-gray-800">{applicantData.emirate}</b></p>
+                )}
+              </div>
             </div>
 
             <div className="space-y-1 sm:text-right">

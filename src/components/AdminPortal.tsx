@@ -27,7 +27,8 @@ import {
   Filter,
   Layers,
   Sparkles,
-  QrCode
+  QrCode,
+  Camera
 } from 'lucide-react';
 import { 
   ApplicantRecord, 
@@ -41,6 +42,8 @@ import {
 import { UAE_SERVICES } from '../data/servicesData.ts';
 import { PerformanceInsights } from './PerformanceInsights.tsx';
 import { QRCodeVisual } from './QRCodeVisual.tsx';
+import { ClientAvatar } from './ClientAvatar.tsx';
+import { AvatarPicker } from './AvatarPicker.tsx';
 
 interface AdminPortalProps {
   isOpen: boolean;
@@ -91,6 +94,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
   const [service, setService] = useState(UAE_SERVICES[0].name);
   const [status, setStatus] = useState<ApplicationStatus>('Received');
   const [amount, setAmount] = useState<number | ''>('');
@@ -131,6 +135,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     service?: string;
   } | null>(null);
 
+  // Quick Profile Photo / Avatar Editor Modal State
+  const [avatarModalApp, setAvatarModalApp] = useState<ApplicantRecord | null>(null);
+
   if (!isOpen) return null;
 
   const handleLogin = (e: React.FormEvent) => {
@@ -148,6 +155,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setName('');
     setPhone('');
     setEmail('');
+    setPhotoUrl(undefined);
     setService(UAE_SERVICES[0].name);
     setStatus('Received');
     setAmount('');
@@ -163,6 +171,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setName(app.name);
     setPhone(app.phone);
     setEmail(app.email || '');
+    setPhotoUrl(app.photoUrl);
     setService(app.service);
     setStatus(app.status);
     setAmount(app.amount);
@@ -186,6 +195,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       name: name.trim(),
       phone: phone.trim(),
       email: email.trim() || undefined,
+      photoUrl,
       service,
       status,
       amount: Number(amount) || 0,
@@ -738,6 +748,24 @@ Direct: +971 55 419 8152`;
                       />
                     </div>
 
+                    {/* Profile Photo Upload & UAE Avatar Selection */}
+                    <div className="md:col-span-3 p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] uppercase tracking-wider text-[#73e4e8] font-bold flex items-center gap-1.5">
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>Client Profile Photo & UAE Avatar Customizer</span>
+                        </label>
+                        <span className="text-[10px] text-gray-400">
+                          Upload passport photo or select representative UAE persona
+                        </span>
+                      </div>
+                      <AvatarPicker
+                        currentPhotoUrl={photoUrl}
+                        applicantName={name}
+                        onPhotoSelected={(url) => setPhotoUrl(url)}
+                      />
+                    </div>
+
                     <div className="md:col-span-3 flex justify-end gap-2.5 pt-2">
                       <button
                         type="button"
@@ -837,8 +865,30 @@ Direct: +971 55 419 8152`;
                               </td>
 
                               <td className="p-3">
-                                <span className="font-semibold text-white block">{app.name}</span>
-                                <span className="text-[11px] text-gray-400 font-mono">{app.phone}</span>
+                                <div className="flex items-center gap-2.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => setAvatarModalApp(app)}
+                                    className="relative group cursor-pointer shrink-0"
+                                    title="Click to personalize or upload client profile photo"
+                                  >
+                                    <ClientAvatar
+                                      photoUrl={app.photoUrl}
+                                      name={app.name}
+                                      size="sm"
+                                      status={app.status}
+                                      priority={app.priority}
+                                      showStatusIndicator={true}
+                                    />
+                                    <span className="absolute inset-0 bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
+                                      <Camera className="w-3 h-3 text-[#73e4e8]" />
+                                    </span>
+                                  </button>
+                                  <div className="min-w-0">
+                                    <span className="font-semibold text-white block truncate">{app.name}</span>
+                                    <span className="text-[11px] text-gray-400 font-mono block">{app.phone}</span>
+                                  </div>
+                                </div>
                               </td>
 
                               <td className="p-3 max-w-[200px]">
@@ -1554,6 +1604,59 @@ Direct: +971 55 419 8152`;
               >
                 Close QR Code
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL 4: Quick Profile Photo / Avatar Personalization Modal */}
+        {avatarModalApp && (
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+            <div className="glass-panel w-full max-w-xl rounded-2xl border border-white/20 p-6 space-y-4 shadow-2xl relative">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#73e4e8]/10 border border-[#73e4e8]/30 flex items-center justify-center text-[#73e4e8]">
+                    <Camera className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-white flex items-center gap-1.5">
+                      <span>Personalize Client Profile</span>
+                    </h4>
+                    <p className="text-xs text-gray-400 font-mono">
+                      {avatarModalApp.id} · <b className="text-white font-sans">{avatarModalApp.name}</b>
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setAvatarModalApp(null)}
+                  className="p-1 rounded-lg bg-white/5 hover:bg-white/15 text-gray-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <AvatarPicker
+                currentPhotoUrl={avatarModalApp.photoUrl}
+                applicantName={avatarModalApp.name}
+                onPhotoSelected={(url) => {
+                  onSaveApplicant({
+                    id: avatarModalApp.id,
+                    photoUrl: url,
+                  });
+                  setAvatarModalApp((prev) => (prev ? { ...prev, photoUrl: url } : null));
+                }}
+              />
+
+              <div className="flex justify-between items-center pt-3 border-t border-white/10 text-xs text-gray-400">
+                <span>Changes save automatically in real time</span>
+                <button
+                  type="button"
+                  onClick={() => setAvatarModalApp(null)}
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#73e4e8] to-[#a99cff] text-[#07111d] text-xs font-bold cursor-pointer shadow-md hover:brightness-110"
+                >
+                  Done
+                </button>
+              </div>
             </div>
           </div>
         )}

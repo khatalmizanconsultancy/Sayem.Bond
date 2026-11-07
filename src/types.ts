@@ -44,6 +44,7 @@ export interface ApplicantRecord {
   name: string;
   phone: string;
   email?: string;
+  photoUrl?: string; // custom uploaded photo data URL or avatar identifier
   service: string;
   serviceCategory: string;
   status: ApplicationStatus;

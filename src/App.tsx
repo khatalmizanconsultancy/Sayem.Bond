@@ -160,6 +160,7 @@ export default function App() {
         name: data.name || 'Client',
         phone: data.phone || '',
         email: data.email,
+        photoUrl: data.photoUrl || undefined,
         service: data.service || 'UAE Typing Service',
         serviceCategory: data.serviceCategory || 'Identity & Immigration',
         status: data.status || 'Received',

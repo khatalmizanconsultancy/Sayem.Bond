@@ -24,6 +24,7 @@ import {
 import confetti from 'canvas-confetti';
 import { ApplicantRecord, ApplicationStatus } from '../types.ts';
 import { QRCodeVisual } from './QRCodeVisual.tsx';
+import { ClientAvatar } from './ClientAvatar.tsx';
 
 interface LiveTrackerSectionProps {
   applicants: ApplicantRecord[];
@@ -286,14 +287,13 @@ export const LiveTrackerSection: React.FC<LiveTrackerSectionProps> = ({
                         key={app.id}
                         type="button"
                         onClick={() => handleQuickDemo(app.id)}
-                        className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-white font-semibold transition-all flex items-center gap-2 group cursor-pointer shadow-sm hover:border-[#73e4e8]/50"
+                        className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-white font-semibold transition-all flex items-center gap-2 group cursor-pointer shadow-sm hover:border-[#73e4e8]/50"
                       >
-                        <span className="relative flex h-2.5 w-2.5">
-                          {dot.pulse && (
-                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${dot.dotClass} opacity-75`}></span>
-                          )}
-                          <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${dot.dotClass}`}></span>
-                        </span>
+                        <ClientAvatar
+                          photoUrl={app.photoUrl}
+                          name={app.name}
+                          size="xs"
+                        />
                         <span className="font-mono font-bold text-white">{app.id}</span>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${dot.badgeClass}`}>
                           {app.name.split(' ')[0]} · {dot.label}
@@ -363,24 +363,34 @@ export const LiveTrackerSection: React.FC<LiveTrackerSectionProps> = ({
               
               {/* Header Info Banner */}
               <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2.5 mb-2">
-                    <span className="text-xl sm:text-2xl font-black font-heading text-white tracking-wide">
-                      {searchedApp.id}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-white/10 text-gray-300 border border-white/10">
-                      {searchedApp.emirate}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#a99cff]/20 text-[#a99cff] border border-[#a99cff]/30">
-                      {searchedApp.priority}
-                    </span>
+                <div className="flex items-start sm:items-center gap-4">
+                  <ClientAvatar
+                    photoUrl={searchedApp.photoUrl}
+                    name={searchedApp.name}
+                    size="xl"
+                    status={searchedApp.status}
+                    priority={searchedApp.priority}
+                    showStatusIndicator={true}
+                  />
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2.5 mb-2">
+                      <span className="text-xl sm:text-2xl font-black font-heading text-white tracking-wide">
+                        {searchedApp.id}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-white/10 text-gray-300 border border-white/10">
+                        {searchedApp.emirate}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#a99cff]/20 text-[#a99cff] border border-[#a99cff]/30">
+                        {searchedApp.priority}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-[#73e4e8]">
+                      {searchedApp.service}
+                    </h3>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Applicant: <b className="text-white font-medium">{searchedApp.name}</b> · {searchedApp.phone}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-bold text-[#73e4e8]">
-                    {searchedApp.service}
-                  </h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Applicant: <b className="text-white font-medium">{searchedApp.name}</b> · {searchedApp.phone}
-                  </p>
                 </div>
 
                 {/* Status Badge */}
